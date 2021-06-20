@@ -8,7 +8,7 @@ def run():
     # Create environment variable that contains the Spotify client id
     # used getenv to replace with value
     spotify_client = SpotifyClient(client_id, client_secret)
-    random_tracks = spotify_client.get_random_tracks()
+    random_tracks = spotify_client.get_popular_tracks(85)
     track_uri = [track['uri'] for track in random_tracks]
     
     was_added_to_playlist = spotify_client.add_tracks_to_playlist(track_uri, playlist_id)

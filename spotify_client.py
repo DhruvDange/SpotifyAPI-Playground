@@ -11,20 +11,26 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy.oauth2 import SpotifyClientCredentials
 
+scope = """ user-read-recently-played, user-top-read, user-read-playback-position,
+            app-remote-control, streaming, playlist-read-private, playlist-read-collaborative,
+            playlist-modify-public, playlist-modify-private, user-library-modify, 
+            user-library-read """
 
 
 class SpotifyClient():
     def __init__(self, client_id, client_secret):
         self.client_id = client_id
         self.client_secret = client_secret
-        st = spotipy.oauth2.SpotifyOAuth(
+        spotify_auth = spotipy.oauth2.SpotifyOAuth(
             client_id=f"{self.client_id}", 
             client_secret=f"{self.client_secret}",
             redirect_uri="http://localhost:8000",
-            scope="playlist-modify-public",
+            scope=scope,
             cache_handler=None
         )
-        self.api_key = st.get_access_token()["access_token"]
+        ss =spotify_auth.get_access_token()
+        print(ss)
+        # self.api_key = st.get_access_token()["access_token"]
         
 
     def get_random_tracks(self):
@@ -70,7 +76,8 @@ class SpotifyClient():
         while(len(pop_tracks)<=20):
             wildcard = f'{random.choice(string.ascii_lowercase)}'
             query = urllib.parse.quote(wildcard)
-            url = f"https://api.spotify.com/v1/search?q={query}&market={market}&type=track&limit=5"
+            offset = random.randint(0,1000)
+            url = f"https://api.spotify.com/v1/search?q={query}&offset={offset}&market={market}&type=track&limit=5"
             response = requests.get(
                 url,
                 headers={
@@ -83,5 +90,5 @@ class SpotifyClient():
             for track in tracks:
                 if (track["popularity"] >= popularity):
                     pop_tracks.append(track)
-        print(len(pop_tracks))
-        return tracks
+        return pop_tracks
+
