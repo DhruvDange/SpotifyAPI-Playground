@@ -75,7 +75,7 @@ class SpotifyClient():
             wildcard = f'{random.choice(string.ascii_lowercase)}'
             query = urllib.parse.quote(wildcard)
             offset = random.randint(0,1000)
-            url = f"https://api.spotify.com/v1/search?q={query}&offset={offset}&market={market}&type=track&limit=5"
+            url = f"https://api.spotify.com/v1/search?q={query}&offset={offset}&market={market}&type=track&limit=20"
             response = requests.get(
                 url,
                 headers={
