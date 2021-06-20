@@ -28,9 +28,7 @@ class SpotifyClient():
             scope=scope,
             cache_handler=None
         )
-        ss =spotify_auth.get_access_token()
-        print(ss)
-        # self.api_key = st.get_access_token()["access_token"]
+        self.api_key = spotify_auth.get_access_token()["access_token"]
         
 
     def get_random_tracks(self):
