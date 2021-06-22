@@ -27,9 +27,4 @@
 
 # import requests
 # import urllib.request
-# url = "https://accounts.spotify.com/authorize?client_id=f5de6d932e734c108d504646c0e30f88&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000&scope=user-read-private%20user-read-email&state=34fFs29kd09"
-
-# response = urllib.request.urlopen("https://accounts.spotify.com/authorize?client_id=f5de6d932e734c108d504646c0e30f88&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000&scope=user-read-private%20user-read-email&state=34fFs29kd09")
-
-#  # https://stackoverflow.com/questions/27554994/spotify-api-authentication-with-python
 # webbrowser.open_new_tab(url)
