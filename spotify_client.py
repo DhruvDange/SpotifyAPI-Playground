@@ -36,7 +36,7 @@ class SpotifyClient():
         if "artist" in uri:
             return uri.removeprefix("spotify:artist:")
         elif "track" in uri:
-            return uri.removeprefix("spotify:track")
+            return uri.removeprefix("spotify:track:")
 
 
 
@@ -147,6 +147,25 @@ class SpotifyClient():
         
         return(self.get_id(selected_artist))
 
+    def get_artist_top_tracks(self, artist_name):
+        artist_id = self.get_artist_uri(artist_name)
+        url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks"
+        market = "US"
+        header = {
+            "Authorization": f"Bearer {self.api_key}"
+        }
+        payload = {
+            "market": market
+        }
+        response = requests.get(url, params=payload, headers=header)
+        response_json = response.json()
+        tracks = [tracks for tracks in response_json['tracks']]
+        track_names = []
+        os.system("cls")
+        print("Popular tracks by ")
+        for i in range(len(tracks)):
+            print(f"")
+        print (track_names)
 
 
 
