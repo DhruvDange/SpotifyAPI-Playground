@@ -144,6 +144,7 @@ class SpotifyClient():
         print("Enter number corresponding to artist: ")
         artist_index = int(input("")) - 1
         selected_artist = artists[artist_index]["uri"]
+        self.artist_name = artists[artist_index]["name"]
         
         return(self.get_id(selected_artist))
 
@@ -160,12 +161,11 @@ class SpotifyClient():
         response = requests.get(url, params=payload, headers=header)
         response_json = response.json()
         tracks = [tracks for tracks in response_json['tracks']]
-        track_names = []
-        os.system("cls")
-        print("Popular tracks by ")
+        os.system('cls')
+        print(f"Popular tracks by {self.artist_name}:")
         for i in range(len(tracks)):
-            print(f"")
-        print (track_names)
+            track = tracks[i]["name"]
+            print(f"{track}")
 
 
 
