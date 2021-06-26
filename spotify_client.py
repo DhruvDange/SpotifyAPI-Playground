@@ -37,6 +37,8 @@ class SpotifyClient():
             return uri.removeprefix("spotify:artist:")
         elif "track" in uri:
             return uri.removeprefix("spotify:track:")
+        elif "playlist" in uri:
+            return uri.removeprefix("spotify:playlist:")
 
 
 
@@ -50,7 +52,7 @@ class SpotifyClient():
             "offset": offset,
             "market": "US",
             "type": "track",
-            "limit": 2
+            "limit": 20
         }
         response = requests.get(
             url,
@@ -63,7 +65,6 @@ class SpotifyClient():
         response_json = response.json()
         tracks = [tracks for tracks in response_json['tracks']['items']]
         print(f"Found {len(tracks)} tracks.")
-        print(response_json)
         return tracks
 
 
@@ -150,6 +151,7 @@ class SpotifyClient():
 
     def get_artist_top_tracks(self, artist_name):
         artist_id = self.get_artist_uri(artist_name)
+        tracks_uri = []
         url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks"
         market = "US"
         header = {
@@ -165,7 +167,43 @@ class SpotifyClient():
         print(f"Popular tracks by {self.artist_name}:")
         for i in range(len(tracks)):
             track = tracks[i]["name"]
+            tracks_uri.append(tracks[i]['uri'])
             print(f"{track}")
+        return tracks_uri
+
+    def get_featured_playlists(self):
+        url = "https://api.spotify.com/v1/browse/featured-playlists"
+        payload = {
+            "country": "US",
+            "limit": 10
+        }
+        header = {
+            "Authorization": f"Bearer {self.api_key}"
+        }
+        response = requests.get(url, params=payload, headers=header)
+        response_json = response.json()
+        playlists = [playlist for playlist in response_json["playlists"]['items']]
+        print("Select playlist")
+        i = 1
+        for playlist in playlists:
+            name = playlist["name"]
+            desc = playlist["description"][:35] + "..."
+            print(f"{i}. {name}: {desc}")
+            i += 1
+        selected_playlist = int(input("Enter number corresponding to playlist (0 for none): ")) - 1
+        if selected_playlist < 0:
+            return
+        playlist_id = self.get_id(playlists[selected_playlist]["uri"])
+        self.follow_playlist(playlist_id)
 
 
+    def follow_playlist(self, playlist_id):
+        url = f"https://api.spotify.com/v1/playlists/{playlist_id}/followers"
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+
+        response = requests.put(url, headers=headers)
+        print(response.ok)
 
